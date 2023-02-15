@@ -1,3 +1,6 @@
+#ifndef PAYLOAD
+#define PAYLOAD
+
 #include <stdlib.h>
 
 typedef struct {
@@ -12,11 +15,11 @@ long generate_key() {
 long generate_payload() {
     return rand() % 1000; // todo find better way
 }
-
+int i = 0; 
 Tuple *create_tuple() {
     Tuple *tuple = (Tuple*)malloc(sizeof(Tuple));
-    tuple->key = generate_key(); 
-    tuple->payload = generate_payload(); 
+    tuple->key = generate_key();
+    tuple->payload = generate_payload();
     return tuple;
 }
 
@@ -26,5 +29,7 @@ int hash(Tuple *tuple, int b) {
 }
 
 void print_tuple(Tuple *tuple) {
-    printf("(%02lu, %lu)", tuple->key, tuple->payload);
+    printf("(%019lu, %4lu) ", tuple->key, tuple->payload);
 }
+
+#endif

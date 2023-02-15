@@ -1,5 +1,4 @@
-#include <stdio.h> // todo delete
-
+#include <stdio.h>
 #include "Payload.c"
 
 typedef struct {
@@ -21,40 +20,34 @@ int count(Buffer *buffer) {
 }
 
 int isFull(Buffer *buffer) {
-    return buffer->next == buffer->size - 1;
+    return buffer->next == buffer->size;
 }
 
 int isEmpty(Buffer *buffer) {
     return buffer->next == 0;
 }
 
-void insert(Buffer *buffer, Tuple *item) {
-    if (isFull(buffer)) {
-        printf("Buffer is full\n");
+void print_buffer_range(Buffer *buffer, int n) {
+    if(count(buffer) == 0) {
+        printf("Empty buffer\n");
         return;
     }
-    buffer->data[buffer->next++] = item;
-}
-
-void print_buffer(Buffer *buffer) {
-    for(int i = 0; i < count(buffer); i++) {
+    for(int i = 0; i < n && i < count(buffer); i++) {
         print_tuple(buffer->data[i]);
     }
     printf("\n");
 }
 
-
-// todo delete
-int main() {
-    Buffer *mybuffer = create_buffer(100);
-    printf("%d\n", isEmpty(mybuffer));
-    printf("%d\n", isFull(mybuffer));
-
-    for(int i = 0; i < 100; i++) {
-        insert(mybuffer, create_tuple());
-    }
-    printf("%d\n", isEmpty(mybuffer));
-    printf("%d\n", isFull(mybuffer));
-    // print_buffer(mybuffer);
-    return 0;
+void print_buffer(Buffer *buffer) {
+    print_buffer_range(buffer, buffer->size);
 }
+
+void insert(Buffer *buffer, Tuple *item) {
+    if (isFull(buffer)) {
+        printf("Warning: Can not insert. Buffer is full\n");
+        print_buffer(buffer);
+        return;
+    }
+    buffer->data[buffer->next++] = item;
+}
+
