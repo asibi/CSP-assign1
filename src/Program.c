@@ -84,7 +84,7 @@ int main(int argc, char *argv[]) {
     //     printf("Buffer-%03d: ", i);
     //     print_buffer_range(buffers[i], 3);
     // }
-    printf("Finish\n"); // todo output result
+    printf("Finish new\n"); // todo output result
 
     return 0;
 }

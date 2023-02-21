@@ -1,2 +1,9 @@
 ## Run the program
-./run.sh
+```
+make
+```
+
+## Clean 
+```
+make clean
+```
