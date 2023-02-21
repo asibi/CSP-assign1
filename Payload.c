@@ -15,7 +15,7 @@ long generate_key() {
 long generate_payload() {
     return rand() % 1000; // todo find better way
 }
-int i = 0; 
+
 Tuple *create_tuple() {
     Tuple *tuple = (Tuple*)malloc(sizeof(Tuple));
     tuple->key = generate_key();
