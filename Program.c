@@ -1,7 +1,6 @@
 #include<pthread.h>
 #include "Buffer.c"
 #include "Payload.c"
-#include <unistd.h>
 
 typedef struct {
     int id;
@@ -26,11 +25,17 @@ void *process(void *args) {
     return NULL;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    int t = 8; // Default value
+    int b = 4; // Default value
+
+    if(argc == 3) {
+        t = atoi(argv[1]);
+        b = atoi(argv[2]);
+    }
+
     /* VARIABLES */ 
     int N = 1 << 24;
-    int t = 8;
-    int b = 4;
     int partition_count = 1 << b;
     int buffer_count = t * partition_count;
     int buffer_size = (N / buffer_count) * 1.5; // 50% extra capacity
@@ -74,11 +79,12 @@ int main() {
     // todo stop time
 
     /* Inspect buffers */
-    printf("Check buffers\n");
-    for(int i =0; i < buffer_count; i++) {
-        printf("Buffer-%03d: ", i);
-        print_buffer_range(buffers[i], 3);
-    }
+    // printf("Check buffers\n");
+    // for(int i =0; i < buffer_count; i++) {
+    //     printf("Buffer-%03d: ", i);
+    //     print_buffer_range(buffers[i], 3);
+    // }
+    printf("Finish\n"); // todo output result
 
     return 0;
 }
