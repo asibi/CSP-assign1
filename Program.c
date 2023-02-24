@@ -1,7 +1,9 @@
-#include<pthread.h>
+#include <assert.h>
+#include <pthread.h>
+
 #include "Buffer.c"
 #include "Payload.c"
-#include <unistd.h>
+
 
 typedef struct {
     int id;
@@ -13,6 +15,7 @@ typedef struct {
     Tuple **input;
     int b; 
 } Args;
+
 
 void *process(void *args) {
     Args *process_args = (Args*) args; 
@@ -26,7 +29,20 @@ void *process(void *args) {
     return NULL;
 }
 
-int main() {
+
+int main(int argc, char** argv) {
+
+    assert(argc == 4 && "Expected 3 arguments: <algorithm id> <num. threads> <num. hash bits>");
+    
+    int algorithmId = atoi(argv[1]);
+    assert((algorithmId == 1 || algorithmId == 2) && "Invalid algorithm id (1 = Independent out, 2 = Count-Then-Move)")
+    
+    int numThreads = atoi(argv[2]);
+    assert(numThreads > 0);
+    
+    int numHashBits = atoi(argv[3]);
+    assert(numHashBits > 1);
+
     /* VARIABLES */ 
     int N = 1 << 24;
     int t = 8;
