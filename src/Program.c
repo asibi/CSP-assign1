@@ -19,7 +19,7 @@ int main(int argc, char** argv) {
     assert(num_threads > 0);
     
     int num_hash_bits = atoi(argv[3]);
-    assert(num_hash_bits > 1);
+    assert(num_hash_bits > 0);
 
     Tuple* tuples = (Tuple*)malloc(sizeof(Tuple) * NUM_TUPLES);
     for (int i = 0; i < NUM_TUPLES; i++)
