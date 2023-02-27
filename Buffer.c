@@ -4,14 +4,14 @@
 typedef struct {
     int next; 
     int size;
-    Tuple **data;
+    const Tuple** data;
 } Buffer;
 
 Buffer *create_buffer(int size) {
     Buffer *buffer = (Buffer*)malloc(sizeof(Buffer));
     buffer->next = 0;
     buffer->size = size; 
-    buffer->data = (Tuple**)malloc(size *sizeof(Tuple*));
+    buffer->data = (const Tuple**)malloc(size *sizeof(Tuple*));
     return buffer;
 }
 
@@ -42,7 +42,7 @@ void print_buffer(Buffer *buffer) {
     print_buffer_range(buffer, buffer->size);
 }
 
-void insert(Buffer *buffer, Tuple *item) {
+void insert(Buffer *buffer, const Tuple *item) {
     if (isFull(buffer)) {
         printf("Warning: Can not insert. Buffer is full\n");
         print_buffer(buffer);
