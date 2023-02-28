@@ -34,7 +34,8 @@ void independent_out(const Tuple* tuples, int num_tuples, int num_threads, int n
 
     int partition_count = 1 << num_hash_bits;
     int buffer_count = num_threads * partition_count;
-    int buffer_size = (num_tuples / buffer_count) * 1.5; // 50% extra capacity
+    // todo use this if numbers get uniformly distribued:  1.5; // 50% extra capacity
+    int buffer_size = ((num_tuples + (buffer_count - 1)) / buffer_count) * 10;
     int tuples_per_thread = num_tuples / num_threads; 
     int buffers_per_thread = (buffer_count / num_threads); 
     Buffer **buffers = (Buffer**)malloc(sizeof(Buffer*) * buffer_count);
@@ -63,6 +64,29 @@ void independent_out(const Tuple* tuples, int num_tuples, int num_threads, int n
     for( int i = 0; i < num_threads; i++ ) {
         pthread_join(threads[i], NULL);
     }
+
+    // /* DEBUG BUFFERS*/
+    // int max = 0;
+    // printf("%d\n", buffer_count);
+    // long histogram[buffer_size+1];
+    // for(int i = 0 ;i < buffer_size; i++) {
+    //     histogram[i] = 0;
+    // }
+    // for ( int i = 0; i < buffer_count; i++){
+    //     histogram[buffers[i]->next]++;
+    //     if(buffers[i]->next > max) {
+    //         // printf("buffer capacity: %d/%d\n", buffers[i]->next, buffers[i]->size);
+    //         max = buffers[i]->next;
+    //     }
+    // }
+    // for(int i = 0 ;i < buffer_size; i++) {
+    //     printf("%d: %ld\n", i, histogram[i]);
+    // }
+    // printf("\n");
+
+
+    /* Free memory*/
+    free(buffers);
 }
 
 #endif // INDEPENDENT_OUT_H
