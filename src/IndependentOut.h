@@ -30,7 +30,7 @@ void* thread_callback(void* args) {
 }
 
 
-void independent_out(const Tuple* tuples, int num_tuples, int num_threads, int num_hash_bits) {
+double independent_out(const Tuple* tuples, int num_tuples, int num_threads, int num_hash_bits) {
 
     int partition_count = 1 << num_hash_bits;
     int buffer_count = num_threads * partition_count;
@@ -45,9 +45,13 @@ void independent_out(const Tuple* tuples, int num_tuples, int num_threads, int n
         buffers[i] = create_buffer(buffer_size);
     }
 
+    ThreadArgs *thread_args = (ThreadArgs*)malloc(sizeof(ThreadArgs) * num_threads); 
+
+    clock_t begin = clock();
+
     /* RUN THREADS */
     for( int i = 0; i < num_threads; i++ ) {
-        ThreadArgs *args = (ThreadArgs*)malloc(sizeof(ThreadArgs)); 
+        ThreadArgs *args = thread_args + i;
         args->id = i;
         args->start = tuples_per_thread * args->id; 
         args->end = args->start + tuples_per_thread; // todo fix so it covers all (edge cases) 
@@ -63,6 +67,11 @@ void independent_out(const Tuple* tuples, int num_tuples, int num_threads, int n
     for( int i = 0; i < num_threads; i++ ) {
         pthread_join(threads[i], NULL);
     }
+
+    clock_t end = clock();
+    double time_spent_ms = (double)(end - begin) / CLOCKS_PER_SEC * 1000.0;
+    
+    return time_spent_ms;
 }
 
 #endif // INDEPENDENT_OUT_H

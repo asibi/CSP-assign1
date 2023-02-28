@@ -28,12 +28,13 @@ int main(int argc, char** argv) {
         tuple_initialize(tuple);
     }
 
-    clock_t begin = clock();
+
+    double time_spent_ms = 0.0;
 
     switch (algorithm_id)
     {
         case 1:
-            independent_out(tuples, NUM_TUPLES, num_threads, num_hash_bits);
+            time_spent_ms = independent_out(tuples, NUM_TUPLES, num_threads, num_hash_bits);
             break;
 
         case 2:
@@ -43,9 +44,6 @@ int main(int argc, char** argv) {
         default:       
             assert(0 && "Unknown algorithm id");
     }
-
-    clock_t end = clock();
-    double time_spent_ms = (double)(end - begin) / CLOCKS_PER_SEC * 1000.0;
 
     printf("%.3f\n", time_spent_ms);
     
