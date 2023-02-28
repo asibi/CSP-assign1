@@ -1,7 +1,11 @@
+#ifndef COUNT_THEN_MOVE_H
+#define COUNT_THEN_MOVE_H
+
 #include <pthread.h>
+#include <unistd.h>
+
 #include "Buffer.c"
 #include "Payload.c"
-#include <unistd.h>
 
 
 typedef struct {
@@ -9,7 +13,7 @@ typedef struct {
     int start;
     int end;
     int** partition_counters;
-    Tuple **input;
+    const Tuple *input;
     Buffer* output_buffer;
     int b;
     int partition_count;
@@ -18,13 +22,14 @@ typedef struct {
     pthread_cond_t* condCounting;
 } CountArgs;
 
+
 void* ctm_thread(void *args) {
     CountArgs *count_args = (CountArgs*) args;
 
     // First pass (count)
     for(int i = count_args->start; i < count_args->end; i++) {
-        Tuple *tuple = count_args->input[i];
-        int hash_value = hash(tuple, count_args->b);
+        const Tuple *tuple = count_args->input + i;
+        int hash_value = tuple_hash(tuple, count_args->b);
         count_args->partition_counters[count_args->id][hash_value]++;
     }
 
@@ -59,8 +64,8 @@ void* ctm_thread(void *args) {
 
     // Second pass (move)
     for(int i = count_args->start; i < count_args->end; i++) {
-        Tuple *tuple = count_args->input[i];
-        int hash_value = hash(tuple, count_args->b);
+        const Tuple *tuple = count_args->input + i;
+        int hash_value = tuple_hash(tuple, count_args->b);
         int offset = offsets[hash_value];
 
         // write to output buffer and increment offset
@@ -69,7 +74,7 @@ void* ctm_thread(void *args) {
     }
 }
 
-void ctm(int tuple_size, Tuple** input, int thread_count, int hash_bits){
+double count_then_move(const Tuple* input, int tuple_size, int thread_count, int hash_bits){
     int partition_count = 1 << hash_bits;
 
     int buffer_count = 1;
@@ -94,8 +99,12 @@ void ctm(int tuple_size, Tuple** input, int thread_count, int hash_bits){
         }
     }    
 
+    CountArgs *threadArgs = (CountArgs*)malloc(sizeof(CountArgs) * thread_count);
+
+    clock_t begin = clock();
+
     for(int i = 0; i < thread_count; i++) {
-        CountArgs *args = (CountArgs*)malloc(sizeof(CountArgs));
+        CountArgs *args = threadArgs + i;
         args->id = i;
         args->start = thread_range * i;
         args->end = args->start + thread_range; // todo fix so it covers all (edge cases)   
@@ -115,6 +124,11 @@ void ctm(int tuple_size, Tuple** input, int thread_count, int hash_bits){
         pthread_join(threads[i], NULL);
     }
 
+    clock_t end = clock();
+    double time_spent_ms = (double)(end - begin) / CLOCKS_PER_SEC * 1000.0;
+
     pthread_mutex_destroy(&mutexCounting);
     pthread_cond_destroy(&condCounting);
 }
+
+#endif // COUNT_THEN_MOVE_H

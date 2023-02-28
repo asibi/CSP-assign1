@@ -14,7 +14,7 @@ do
     do
         # Run program with t and b
         echo "Running: t=$t b=$b"
-        algorithm=1
+        algorithm=2
         ./program $algorithm $t $b > results/output-$t-$b.txt # todo specify algorithm 
     done
 done

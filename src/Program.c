@@ -3,6 +3,7 @@
 #include "Buffer.c"
 #include "Payload.c"
 #include "IndependentOut.h"
+#include "CountThenMove.c"
 
 
 const int NUM_TUPLES = 1 << 24;
@@ -28,7 +29,6 @@ int main(int argc, char** argv) {
         tuple_initialize(tuple);
     }
 
-
     double time_spent_ms = 0.0;
 
     switch (algorithm_id)
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
             break;
 
         case 2:
-            assert(0 && "Count-Then-Move is not implemented");
+            time_spent_ms = count_then_move(tuples, NUM_TUPLES, num_threads, num_hash_bits);
             break;
 
         default:       
