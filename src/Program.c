@@ -1,9 +1,9 @@
 #include <assert.h>
 
-#include "Buffer.c"
-#include "Payload.c"
+#include "Buffer.h"
+#include "Payload.h"
 #include "IndependentOut.h"
-#include "CountThenMove.c"
+#include "CountThenMove.h"
 
 
 const int NUM_TUPLES = 1 << 24;

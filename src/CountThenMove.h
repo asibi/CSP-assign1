@@ -4,8 +4,8 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "Buffer.c"
-#include "Payload.c"
+#include "Buffer.h"
+#include "Payload.h"
 
 
 typedef struct {

@@ -2,7 +2,7 @@
 #define BUFFER_H
 
 #include <stdio.h>
-#include "Payload.c"
+#include "Payload.h"
 
 typedef struct {
     int next; 
