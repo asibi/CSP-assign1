@@ -1,3 +1,6 @@
+#ifndef BUFFER_H
+#define BUFFER_H
+
 #include <stdio.h>
 #include "Payload.c"
 
@@ -51,3 +54,4 @@ void insert(Buffer *buffer, const Tuple *item) {
     buffer->data[buffer->next++] = item;
 }
 
+#endif // #BUFFER_H
