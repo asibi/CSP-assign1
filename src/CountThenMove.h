@@ -35,9 +35,9 @@ void* ctm_thread(void *args) {
 
     pthread_mutex_lock(count_args->mutexCounting);
     (*count_args->threads_still_counting)--;
-    pthread_mutex_unlock(count_args->mutexCounting);
     // signal that this thread is done counting
-    pthread_cond_signal(count_args->condCounting);
+    pthread_cond_broadcast(count_args->condCounting);
+    pthread_mutex_unlock(count_args->mutexCounting);
 
     // synchronize with other threads
     pthread_mutex_lock(count_args->mutexCounting);

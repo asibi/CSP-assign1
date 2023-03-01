@@ -3,7 +3,7 @@
 set -e
 
 # Compile program 
-gcc src/Program.c -o program
+gcc src/Program.c -pthread -o program
 
 mkdir -p results
 
