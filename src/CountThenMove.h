@@ -131,6 +131,11 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
     double time_spent_ms = (end_time.tv_sec - start_time.tv_sec) * 1000;
     time_spent_ms += (end_time.tv_nsec - start_time.tv_nsec) / 1000000.0;
 
+    for (int i = 0; i < thread_count; i++) {
+        free(partition_counters[i]);
+    }
+    free(partition_counters);
+
     pthread_mutex_destroy(&mutexCounting);
     pthread_cond_destroy(&condCounting);
 
