@@ -37,7 +37,7 @@ double independent_out(const Tuple* tuples, int num_tuples, int num_threads, int
     int partition_count = 1 << num_hash_bits;
     int buffer_count = num_threads * partition_count;
     // todo use this if numbers get uniformly distribued:  1.5; // 50% extra capacity
-    int buffer_size = ((num_tuples + (buffer_count - 1)) / buffer_count) * 10;
+    int buffer_size = ((num_tuples + (buffer_count - 1)) / buffer_count) * 5;
     int tuples_per_thread = num_tuples / num_threads; 
     int buffers_per_thread = (buffer_count / num_threads); 
     Buffer **buffers = (Buffer**)malloc(sizeof(Buffer*) * buffer_count);
