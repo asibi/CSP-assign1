@@ -101,7 +101,8 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
 
     CountArgs *threadArgs = (CountArgs*)malloc(sizeof(CountArgs) * thread_count);
 
-    clock_t begin = clock();
+    struct timespec start_time;
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
 
     for(int i = 0; i < thread_count; i++) {
         CountArgs *args = threadArgs + i;
@@ -124,11 +125,16 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
         pthread_join(threads[i], NULL);
     }
 
-    clock_t end = clock();
-    double time_spent_ms = (double)(end - begin) / CLOCKS_PER_SEC * 1000.0;
+    struct timespec end_time;
+    clock_gettime(CLOCK_MONOTONIC, &end_time);
+
+    double time_spent_ms = (end_time.tv_sec - start_time.tv_sec) * 1000;
+    time_spent_ms += (end_time.tv_nsec - start_time.tv_nsec) / 1000000.0;
 
     pthread_mutex_destroy(&mutexCounting);
     pthread_cond_destroy(&condCounting);
+
+    return time_spent_ms;
 }
 
 #endif // COUNT_THEN_MOVE_H

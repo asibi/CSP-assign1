@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <pthread.h>
 
+#include <time.h>
+
 
 typedef struct {
     int id;
@@ -48,7 +50,8 @@ double independent_out(const Tuple* tuples, int num_tuples, int num_threads, int
 
     ThreadArgs *thread_args = (ThreadArgs*)malloc(sizeof(ThreadArgs) * num_threads); 
 
-    clock_t begin = clock();
+    struct timespec start_time;
+    clock_gettime(CLOCK_MONOTONIC, &start_time);
 
     /* RUN THREADS */
     for( int i = 0; i < num_threads; i++ ) {
@@ -68,9 +71,12 @@ double independent_out(const Tuple* tuples, int num_tuples, int num_threads, int
     for( int i = 0; i < num_threads; i++ ) {
         pthread_join(threads[i], NULL);
     }
+    
+    struct timespec end_time;
+    clock_gettime(CLOCK_MONOTONIC, &end_time);
 
-    clock_t end = clock();
-    double time_spent_ms = (double)(end - begin) / CLOCKS_PER_SEC * 1000.0;
+    double time_spent_ms = (end_time.tv_sec - start_time.tv_sec) * 1000;
+    time_spent_ms += (end_time.tv_nsec - start_time.tv_nsec) / 1000000.0;
 
     /* Free memory*/
     free(buffers);
