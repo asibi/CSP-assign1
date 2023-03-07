@@ -3,7 +3,6 @@
 
 #include <stdlib.h>
 #include <pthread.h>
-
 #include <time.h>
 
 
@@ -36,7 +35,10 @@ double independent_out(const Tuple* tuples, int num_tuples, int num_threads, int
 
     int partition_count = 1 << num_hash_bits;
     int buffer_count = num_threads * partition_count;
-    int buffer_size = ((num_tuples + (buffer_count - 1)) / buffer_count) * 2;
+    int buffer_size = ((num_tuples + (buffer_count - 1)) / buffer_count) * 5;
+    const int MIN_BUFFER_SIZE = 100;
+    buffer_size = buffer_size < MIN_BUFFER_SIZE ? MIN_BUFFER_SIZE : buffer_size;
+    
     int tuples_per_thread = num_tuples / num_threads; 
     int buffers_per_thread = (buffer_count / num_threads); 
     Buffer **buffers = (Buffer**)malloc(sizeof(Buffer*) * buffer_count);

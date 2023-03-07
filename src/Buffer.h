@@ -39,7 +39,7 @@ int isEmpty(Buffer *buffer) {
 
 void insert(Buffer *buffer, const Tuple *item) {
     if (isFull(buffer)) {
-        printf("Warning: Can not insert. Buffer is full\n");
+        printf("Warning: Cannot insert - buffer is full! (size=%d)\n", buffer->size);
         return;
     }
     buffer->data[buffer->next++] = item;

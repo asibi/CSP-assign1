@@ -87,9 +87,10 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
     // 2^b counters per thread
 
     pthread_mutex_t mutexCounting;
-    pthread_mutex_init(&mutexCounting, NULL);
+    pthread_mutex_init(&mutexCounting, NULL) == 0;
+
     pthread_cond_t condCounting;
-    pthread_cond_init(&condCounting, NULL);
+    pthread_cond_init(&condCounting, NULL) == 0;
 
     int** partition_counters = (int**)malloc(sizeof(int*) * thread_count);
     for (int i = 0; i < thread_count; i++) {
@@ -104,6 +105,8 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
     struct timespec start_time;
     clock_gettime(CLOCK_MONOTONIC, &start_time);
 
+    int num_counting_threads = thread_count;
+
     for(int i = 0; i < thread_count; i++) {
         CountArgs *args = threadArgs + i;
         args->id = i;
@@ -114,7 +117,7 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
         args->output_buffer = output_buffer;
         args->b = hash_bits;
         args->partition_count = partition_count;
-        args->threads_still_counting = &thread_count;
+        args->threads_still_counting = &num_counting_threads;
         args->mutexCounting = &mutexCounting;
         args->condCounting = &condCounting;
 
