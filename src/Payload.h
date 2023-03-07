@@ -3,32 +3,25 @@
 
 #include <stdlib.h>
 
+#include "MTwister.h"
+
 
 typedef struct {
-    long key;
+    unsigned long key;
     long payload;
 } Tuple;
 
 
-long generate_key() {
-    return ((long)rand() << 32 | (long)rand()); // todo find better way
-}
-
-
-void tuple_initialize(Tuple* tuple) {
-    tuple->key = generate_key();
+void tuple_initialize(Tuple* tuple, MTRand* mersenne_twister) {
+    tuple->key = genRandLong(mersenne_twister);
+    
     tuple->payload = tuple->key;
 }
 
 
 int tuple_hash(const Tuple* tuple, int b) {
-    int mask = (1 << b) - 1; 
-    return tuple->key & mask; 
-}
-
-
-void print_tuple(const Tuple *tuple) {
-    printf("(%019lu, %4lu) ", tuple->key, tuple->payload);
+    unsigned long mask = (1 << b) - 1; 
+    return (int)(tuple->key & mask); 
 }
 
 

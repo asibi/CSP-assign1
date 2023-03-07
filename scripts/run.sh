@@ -3,7 +3,7 @@
 set -e
 
 # Compile program 
-gcc -pthread src/Program.c -O3 -o program
+gcc -pthread src/Program.c src/MTwister.c -O3 -o program
 
 rm -rf results
 mkdir -p results

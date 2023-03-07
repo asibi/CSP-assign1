@@ -1,5 +1,6 @@
 #include <assert.h>
 
+#include "MTwister.h"
 #include "Buffer.h"
 #include "Payload.h"
 #include "IndependentOut.h"
@@ -22,11 +23,14 @@ int main(int argc, char** argv) {
     int num_hash_bits = atoi(argv[3]);
     assert(num_hash_bits > 0);
 
+    // Consistent seed so we get the same random values every run
+    MTRand mersenne_twister = seedRand(1337);
+
     Tuple* tuples = (Tuple*)malloc(sizeof(Tuple) * NUM_TUPLES);
     for (int i = 0; i < NUM_TUPLES; i++)
     {
         Tuple* tuple = tuples + i;
-        tuple_initialize(tuple);
+        tuple_initialize(tuple, &mersenne_twister);
     }
 
     double time_spent_ms = 0.0;

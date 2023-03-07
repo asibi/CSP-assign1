@@ -79,7 +79,7 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
 
     int buffer_count = 1;
     // Computing range size of input to be assigned to each thread
-    int buffer_size = (tuple_size / buffer_count) * 5; // 50% extra capacity
+    int buffer_size = (tuple_size / buffer_count) * 2; // 50% extra capacity
     int thread_range = tuple_size / thread_count;
     pthread_t threads[thread_count];
     Buffer* output_buffer = create_buffer(buffer_size);
@@ -108,7 +108,7 @@ double count_then_move(const Tuple* input, int tuple_size, int thread_count, int
         CountArgs *args = threadArgs + i;
         args->id = i;
         args->start = thread_range * i;
-        args->end = args->start + thread_range; // todo fix so it covers all (edge cases)   
+        args->end = args->start + thread_range;
         args->partition_counters = partition_counters;
         args->input = input; 
         args->output_buffer = output_buffer;
