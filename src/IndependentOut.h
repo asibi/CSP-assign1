@@ -5,6 +5,9 @@
 #include <pthread.h>
 #include <time.h>
 
+#include "Tuple.h"
+#include "Buffer.h"
+
 
 typedef struct {
     int id;

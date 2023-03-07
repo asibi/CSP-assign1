@@ -1,5 +1,5 @@
-#ifndef PAYLOAD_H
-#define PAYLOAD_H
+#ifndef TUPLE_H
+#define TUPLE_H
 
 #include <stdlib.h>
 
@@ -25,4 +25,4 @@ int tuple_hash(const Tuple* tuple, int b) {
 }
 
 
-#endif // PAYLOAD_H
+#endif // TUPLE_H
