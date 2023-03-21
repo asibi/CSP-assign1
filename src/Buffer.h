@@ -2,6 +2,7 @@
 #define BUFFER_H
 
 #include <stdio.h>
+#include <assert.h>
 
 #include "Tuple.h"
 
@@ -37,12 +38,16 @@ int isEmpty(Buffer *buffer) {
 }
 
 
-void insert(Buffer *buffer, const Tuple *item) {
-    if (isFull(buffer)) {
-        printf("Warning: Cannot insert - buffer is full! (size=%d)\n", buffer->size);
-        return;
-    }
+void buffer_append(Buffer *buffer, const Tuple *item) {
+    assert(!isFull(buffer));
     buffer->data[buffer->next++] = item;
 }
+
+
+void buffer_insert(Buffer* buffer, const Tuple* item, int index) {
+    assert(index < buffer->size);
+    buffer->data[index] = item;
+}
+
 
 #endif // #BUFFER_H

@@ -28,7 +28,7 @@ void* thread_callback(void* args) {
         const Tuple *tuple = thread_args->input + i;
         int hash_value = tuple_hash(tuple, thread_args->num_hash_bits);
         int index = thread_args->buffer_start + hash_value;
-        insert(thread_args->buffers[index], tuple); 
+        buffer_append(thread_args->buffers[index], tuple); 
     }
     return NULL;
 }
